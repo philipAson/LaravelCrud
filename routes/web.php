@@ -16,11 +16,6 @@ Route::get('/jobs', function () {
         'jobs' => Job::all()
     ]);
 });
-// Route::get('/jobs', function () use ($jobs) {
-//     return view('jobs', [
-//         'jobs' => $jobs
-//     ]);
-// });
 
 Route::get('/jobs/{id}', function ($id) use ($jobs) {
 
