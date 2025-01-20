@@ -3,8 +3,9 @@
         Edit Job {{ $job->title }}
     </x-slot:heading>
 
-    <form method="POST" action="/jobs">
+    <form method="POST" action="/jobs/{{ $job->id }}">
         @csrf
+        @method('PATCH')
 
         <div class="space-y-12">
             <div class="border-b border-gray-900/10 pb-12">
@@ -15,14 +16,9 @@
                         <div class="mt-2">
                             <div
                                 class="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                <input 
-                                    type="text"
-                                    name="title"
-                                    id="title"
+                                <input type="text" name="title" id="title"
                                     class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 px-3"
-                                    required
-                                    placeholder="job" 
-                                    value="{{ $job->title }}">
+                                    required placeholder="job" value="{{ $job->title }}">
                             </div>
                             @error('title')
                                 <p class="mt-2 text-xs text-red-500 font-semibold">
@@ -36,14 +32,9 @@
                         <div class="mt-2">
                             <div
                                 class="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                <input 
-                                    type="text" 
-                                    name="salary" 
-                                    id="salary"
+                                <input type="text" name="salary" id="salary"
                                     class="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 px-3"
-                                    required
-                                    placeholder="$1" 
-                                    value="{{ $job - salary }}">
+                                    required placeholder="$1" value="{{ $job->salary }}">
                             </div>
                             @error('salary')
                                 <p class="mt-1 text-xs text-red-500 font-semibold">
@@ -54,21 +45,25 @@
                     </div>
                 </div>
                 <div class="mt-4"></div>
-                {{-- @if ($errors->any())
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li class="text-red-500 italic">{{$error}}</li>
-                        @endforeach
-                    </ul>
-                @endif --}}
             </div>
         </div>
 
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" class="text-sm/6 font-semibold text-gray-900">Cancel</button>
-            <button type="submit"
-                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+        <div class="mt-6 flex items-center justify-between gap-x-6">
+            <div class="flex items-center gap-x-6">
+                <button form="delete-form" class="text-red-500 text-sm font-bold">Delete</button>
+            </div>
+            <div class="flex items-center gap-x-6">
+                <a href="/jobs/{{ $job->id }}" class="text-sm/6 font-semibold text-gray-900">Cancel</a>
+                <button type="submit"
+                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Update
+                </button>
+            </div>
         </div>
+    </form>
+    <form id="delete-form" method="POST" action="/jobs/{{ $job->id }}" class="hidden">
+        @csrf
+        @method('DELETE')
     </form>
 
 </x-layout>

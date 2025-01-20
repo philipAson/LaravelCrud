@@ -1,67 +1,27 @@
 <?php
 
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Job;
 
+Route::view('/', 'home');
+Route::view('/contact', 'contact');
 
+// Jobs
+// Route::controller(JobController::class)->group(function () {
+//     Route::get('/jobs', 'index');
+//     Route::get('/jobs/create', 'create');
+//     Route::get('/jobs/{job}', 'show');
+//     Route::post('/jobs', 'store');
+//     Route::get('/jobs/{job}/edit', 'edit');
+//     Route::patch('/jobs/{job}', 'update');
+//     Route::delete('/jobs/{job}', 'destroy');
+// });
 
-$jobs = Job::all();
+// Does the same as above.
+Route::resource('jobs', JobController::class, [
+    
+    // Optional feature
 
-Route::get('/', function () {
-    return view('home');
-});
-
-//All
-Route::get('/jobs', function () {
-    $jobs = Job::with('employer')->latest()->simplePaginate(5);
-
-    return view('jobs.index', [
-        'jobs' => $jobs
-    ]);
-});
-
-//Create
-Route::get('/jobs/create', function () {
-    return view('jobs.create');
-});
-
-//Show
-Route::get('/jobs/{id}', function ($id) use ($jobs) {
-
-
-    $job = Job::find($id);
-
-    return view('jobs.show', ['job' => $job]);
-});
-
-//Store
-Route::post('/jobs', function () {
-    // dd(request()->all());
-
-    // validation...
-    request()->validate([
-        'title' => ['required', 'min:3'],
-        'salary' => ['required']
-    ]);
-
-    $job = Job::create([
-        'title' => request('title'),
-        'salary' => request('salary'),
-        'employer_id' => 1
-    ]);
-
-    return redirect('/jobs/' . $job->id);
-});
-
-//Edit
-Route::get('/jobs/{id}/edit', function ($id) use ($jobs) {
-
-
-    $job = Job::find($id);
-
-    return view('jobs.edit', ['job' => $job]);
-});
-
-Route::get('/contact', function () {
-    return view('contact');
-});
+    // 'only' => ['index', 'show', 'create'],
+    // 'except' => ['store']
+]);
